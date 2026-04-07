@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Housely — Property in London awaits</title>
+<style>
+/* ================================================================
+   DESIGN TOKENS — Adapted Simple Design System v1.1
+   ================================================================ */
+:root {
+  /* Font families */
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono: "Roboto Mono", monospace;
+
+  /* Color primitives */
+  --color-gray-100:  #fdfbfb;
+  --color-gray-200:  #e6e6e6;
+  --color-gray-300:  #d9d9d9;
+  --color-gray-400:  #b3b3b3;
+  --color-gray-500:  #757575;
+  --color-gray-600:  #444444;
+  --color-gray-700:  #383838;
+  --color-gray-800:  #2c2c2c;
+  --color-gray-900:  #1e1e1e;
+  --color-gray-1000: #111111;
+  --color-slate-100: #f3f3f3;
+  --color-slate-200: #e3e3e3;
+  --color-slate-900: #303030;
+  --color-green-500: #14ae5c;
+  --color-white:     #ffffff;
+
+  /* Semantic tokens */
+  --bg-default:        #ffffff;
+  --bg-subtle:         #f3f3f3;
+  --bg-brand:          #1dd287;
+  --bg-brand-hover:    #13b874;
+  --bg-dark:           #111111;
+  --text-default:      #1e1e1e;
+  --text-secondary:    #757575;
+  --text-tertiary:     #b3b3b3;
+  --text-on-brand:     #ffffff;
+  --text-on-dark:      #ffffff;
+  --text-brand:        #1dd287;
+  --border-default:    #e6e6e6;
+  --border-secondary:  #d9d9d9;
+
+  /* Spacing */
+  --space-050:   2px;
+  --space-100:   4px;
+  --space-150:   6px;
+  --space-200:   8px;
+  --space-300:  12px;
+  --space-400:  16px;
+  --space-600:  24px;
+  --space-800:  32px;
+  --space-1000: 40px;
+  --space-1200: 48px;
+  --space-1600: 64px;
+  --space-2000: 80px;
+  --space-2400: 96px;
+  --space-3000: 120px;
+
+  /* Border radius */
+  --radius-100:  2px;
+  --radius-200:  4px;
+  --radius-300:  8px;
+  --radius-400:  16px;
+  --radius-full: 9999px;
+
+  /* Stroke */
+  --stroke-border:     1px;
+  --stroke-focus-ring: 2px;
+
+  /* Shadows */
+  --shadow-100: 0 1px 4px 0 rgba(12,12,13,.05);
+  --shadow-200: 2px 2px 4px -3px rgba(12,12,13,.05), 4px 4px 8px 0 rgba(12,12,13,.08);
+  --shadow-400: 0 4px 4px -4px rgba(12,12,13,.05), 0 16px 32px -4px rgba(12,12,13,.10);
+
+  /* Typography */
+  --text-h1-size:        72px;
+  --text-h2-size:        48px;
+  --text-h3-size:        32px;
+  --text-h4-size:        24px;
+  --text-h5-size:        20px;
+  --text-h6-size:        16px;
+  --text-h7-size:        12px;
+  --text-body-lg:        20px;
+  --text-body-md:        16px;
+  --text-body-sm:        12px;
+  --text-body-xs:        10px;
+  --text-lh-heading:     1.2;
+  --text-lh-body:        1.4;
+  --text-ls-h1:          -0.03em;
+  --text-ls-h2:          -0.02em;
+  --text-ls-h7:          0.2em;
+  --font-weight-light:   300;
+  --font-weight-regular: 400;
+  --font-weight-semibold:600;
+  --font-weight-bold:    700;
+}
+
+/* ================================================================
+   RESET & BASE
+   ================================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+  font-family: var(--font-sans);
+  color: var(--text-default);
+  background: var(--bg-default);
+  line-height: var(--text-lh-body);
+  -webkit-font-smoothing: antialiased;
+}
+img { display: block; max-width: 100%; }
+a   { text-decoration: none; color: inherit; }
+
+/* ================================================================
+   LAYOUT HELPERS
+   ================================================================ */
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 var(--space-2400);
+}
+.container--wide {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 var(--space-800);
+}
+
+/* ================================================================
+   SHARED COMPONENTS
+   ================================================================ */
+
+/* Buttons */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--space-200);
+  padding: var(--space-300) var(--space-600);
+  border-radius: var(--radius-200);
+  font-family: var(--font-sans);
+  font-size: var(--text-h7-size);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--text-ls-h7);
+  text-transform: uppercase;
+  cursor: pointer; border: var(--stroke-border) solid transparent;
+  transition: background .18s, color .18s, border-color .18s;
+  white-space: nowrap;
+  height: 48px;
+}
+.btn--primary {
+  background: var(--bg-brand);
+  color: var(--text-on-brand);
+  border-color: var(--bg-brand);
+}
+.btn--primary:hover { background: var(--bg-brand-hover); border-color: var(--bg-brand-hover); }
+
+.btn--subtle {
+  background: transparent;
+  color: var(--text-default);
+}
+.btn--subtle:hover {
+  background: var(--bg-subtle);
+  border-color: var(--border-default);
+}
+
+.btn--sm {
+  height: 32px;
+  font-size: var(--text-body-xs);
+  padding: var(--space-200) var(--space-300);
+  letter-spacing: 0.13em;
+}
+
+/* Icon + text link */
+.text-link {
+  display: inline-flex; align-items: center; gap: var(--space-100);
+  font-size: var(--text-body-md);
+  font-weight: var(--font-weight-regular);
+  color: var(--text-default);
+  transition: gap .15s;
+}
+.text-link:hover { gap: var(--space-200); }
+.text-link img { width: 24px; height: 24px; }
+
+/* Divider */
+.divider {
+  height: var(--stroke-border);
+  background: var(--border-default);
+  width: 100%;
+}
+
+/* ================================================================
+   1. NAV
+   ================================================================ */
+.nav {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--bg-default);
+  border-bottom: var(--stroke-border) solid var(--border-default);
+  box-shadow: var(--shadow-100);
+}
+.nav-inner {
+  display: flex; align-items: center;
+  height: 72px; gap: var(--space-800);
+}
+.nav-logo {
+  display: flex; align-items: center; gap: var(--space-200);
+  flex-shrink: 0;
+  font-size: var(--text-h5-size);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-default);
+  letter-spacing: -0.01em;
+}
+.nav-logo-icon {
+  width: 28px; height: 28px;
+}
+.nav-links {
+  display: flex; align-items: center; flex: 1;
+}
+.nav-links a {
+  display: flex; align-items: center;
+  padding: var(--space-200) var(--space-400);
+  font-size: var(--text-body-md);
+  font-weight: var(--font-weight-regular);
+  color: var(--text-default);
+  border-radius: var(--radius-200);
+  transition: background .15s;
+  white-space: nowrap;
+}
+.nav-links a:hover { background: var(--bg-subtle); }
+.nav-links a.active {
+  font-weight: var(--font-weight-bold);
+  border-bottom: 2px solid var(--bg-brand);
+  border-radius: 0;
+}
+.nav-auth {
+  display: flex; align-items: center; gap: var(--space-300);
+  flex-shrink: 0;
+}
+.nav-signin {
+  padding: var(--space-200) var(--space-400);
+  font-size: var(--text-body-md);
+  color: var(--text-default);
+  border-radius: var(--radius-200);
+  transition: background .15s;
+  height: 40px; display: flex; align-items: center;
+}
+.nav-signin:hover { background: var(--bg-subtle); }
+.nav-register {
+  background: var(--bg-brand);
+  color: var(--text-on-brand);
+  border-radius: var(--radius-full);
+  padding: 0 var(--space-600);
+  height: 40px; display: flex; align-items: center;
+  font-size: var(--text-body-md);
+  font-weight: var(--font-weight-bold);
+  transition: background .18s;
+}
+.nav-register:hover { background: var(--bg-brand-hover); }
+
+/* ================================================================
+   2. HERO
+   ================================================================ */
+.hero {
+  position: relative;
+  height: 540px;
+  overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background-image: url("https://www.figma.com/api/mcp/asset/0664ffcd-721e-497c-8c3b-9965c400bfb4");
+  background-size: cover; background-position: center;
+}
+.hero-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(17,17,17,.55) 0%, rgba(17,17,17,.65) 100%);
+}
+.hero-content {
+  position: relative; z-index: 2;
+  text-align: center;
+  padding: 0 var(--space-600);
+  max-width: 680px;
+}
+.hero-content h1 {
+  font-size: var(--text-h1-size);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-on-dark);
+  line-height: var(--text-lh-heading);
+  letter-spacing: var(--text-ls-h1);
+  margin-bottom: var(--space-400);
+}
+.hero-content p {
+  font-size: var(--text-body-md);
+  color: rgba(255,255,255,.8);
+  margin-bottom: var(--space-800);
+  line-height: 1.6;
+}
+.hero-btns {
+  display: flex; gap: var(--space-300); justify-content: center;
+}
+
+/* ================================================================
+   3. SEARCH BAR (floats over hero bottom + stats top)
+   ================================================================ */
+.search-wrapper {
+  position: relative; z-index: 10;
+  margin-top: -60px;
+  padding: 0 var(--space-2400);
+  max-width: 1400px;
+  margin-left: auto; margin-right: auto;
+  margin-bottom: calc(-60px + var(--space-2400));
+}
+.search-card {
+  background: var(--bg-default);
+  border-radius: var(--radius-300);
+  box-shadow: var(--shadow-400);
+  padding: var(--space-600);
+  display: grid;
+  grid-template-columns: 1fr 1fr 80px 80px 1fr auto;
+  gap: var(--space-400);
+  align-items: end;
+}
+.search-field {
+  display: flex; flex-direction: column; gap: var(--space-100);
+}
+.search-field label {
+  font-size: var(--text-body-xs);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--text-ls-h7);
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+.search-field input,
+.search-field select {
+  height: 40px;
+  border: var(--stroke-border) solid var(--border-default);
+  border-radius: var(--radius-200);
+  padding: 0 var(--space-300);
+  font-family: var(--font-sans);
+  font-size: var(--text-body-sm);
+  color: var(--text-default);
+  background: var(--bg-default);
+  outline: none;
+  transition: border-color .15s;
+  appearance: none;
+}
+.search-field input:focus,
+.search-field select:focus { border-color: var(--bg-brand); }
+.search-field input::placeholder { color: var(--text-tertiary); }
+.search-btn {
+  align-self: end;
+}
+
+/* ================================================================
+   4. STATISTICS
+   ================================================================ */
+.statistics {
+  background: var(--bg-default);
+  padding: calc(var(--space-3000) + 60px) 0 var(--space-3000);
+}
+.statistics-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-1600);
+  align-items: start;
+}
+.stats-left {}
+.stats-eyebrow {
+  font-size: var(--text-h3-size);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-default);
+  margin-bottom: var(--space-600);
+  display: flex; align-items: center; gap: var(--space-400);
+}
+.stats-eyebrow::before {
+  content: '';
+  display: block; width: 4px; height: 32px;
+  background: var(--bg-brand); border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+.stats-subheading {
+  font-size: var(--text-h6-size);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-default);
+  margin-bottom: var(--space-400);
+}
+.stats-body {
+  font-size: var(--text-body-md);
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: var(--space-800);
+  max-width: 480px;
+}
+.stats-right {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: var(--space-600);
+}
+.stat-card {
+  border: var(--stroke-border) solid var(--border-default);
+  border-radius: var(--radius-300);
+  padding: var(--space-600);
+  display: flex; flex-direction: column; gap: var(--space-400);
+}
+.stat-card-icon {
+  width: 40px; height: 40px;
+}
+.stat-card-number {
+  font-size: var(--text-h2-size);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-default);
+  line-height: 1;
+  letter-spacing: var(--text-ls-h2);
+}
+.stat-card-desc {
+  font-size: var(--text-body-sm);
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ================================================================
+   5. OUR PROPERTY
+   ================================================================ */
+.property-section {
+  background: var(--bg-default);
+  padding: var(--space-3000) 0;
+  border-top: var(--stroke-border) solid var(--border-default);
+}
+.section-heading-row {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: var(--space-1600);
+}
+.section-heading-row h2 {
+  font-size: var(--text-h3-size);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-default);
+  letter-spacing: -0.01em;
+}
+.chevron-group {
+  display: flex; gap: var(--space-100);
+}
+.chevron-group button {
+  width: 32px; height: 32px;
+  background: transparent;
+  border: var(--stroke-border) solid var(--border-secondary);
+  border-radius: var(--radius-200);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: background .15s, border-color .15s;
+}
+.chevron-group button:hover {
+  background: var(--bg-subtle);
+  border-color: var(--border-default);
+}
+.chevron-group img { width: 16px; height: 16px; opacity: .5; }
+
+.property-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-600);
+}
+.property-card {
+  border: var(--stroke-border) solid var(--border-default);
+  border-radius: var(--radius-300);
+  overflow: hidden;
+  background: var(--bg-default);
+  transition: box-shadow .2s, transform .2s;
+}
+.property-card:hover {
+  box-shadow: var(--shadow-400);
+  transform: translateY(-2px);
+}
+.property-card-img {
+  width: 100%; height: 200px;
+  object-fit: cover; display: block;
+}
+.property-card-body { padding: var(--space-400); }
+
+.property-tag {
+  display: inline-block;
+  background: var(--bg-brand);
+  color: var(--text-on-brand);
+  font-size: var(--text-body-xs);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 2px var(--space-200);
+  border-radius: var(--radius-100);
+  margin-bottom: var(--space-300);
+}
+.property-address {
+  font-size: var(--text-body-md);
+  font-weight: var(--font-weight-regular);
+  color: var(--text-default);
+  line-height: 1.4;
+  margin-bottom: var(--space-050);
+}
+.property-location {
+  font-size: var(--text-body-sm);
+  color: var(--text-secondary);
+  margin-bottom: var(--space-300);
+}
+.property-desc {
+  font-size: var(--text-body-sm);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: var(--space-300);
+}
+.property-price {
+  font-size: var(--text-body-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-default);
+  margin-bottom: var(--space-300);
+}
+.property-divider {
+  height: var(--stroke-border);
+  background: var(--border-default);
+  margin-bottom: var(--space-300);
+}
+.property-icons {
+  display: flex; align-items: center; gap: var(--space-300);
+}
+.property-icon-item {
+  display: flex; align-items: center; gap: var(--space-100);
+  font-size: var(--text-body-sm);
+  color: var(--text-secondary);
+}
+.property-icon-item img { width: 16px; height: 16px; opacity: .6; }
+.prop-icon-sep {
+  width: var(--stroke-border);
+  height: 16px;
+  background: var(--border-default);
+}
+
+/* ================================================================
+   6. FEATURED PROPERTY
+   ================================================================ */
+.featured {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 560px;
+}
+.featured-left {
+  background: var(--bg-dark);
+  padding: var(--space-3000) var(--space-2400);
+  display: flex; flex-direction: column; justify-content: center;
+  gap: var(--space-600);
+}
+.featured-label {
+  display: inline-flex; align-items: center;
+  border: var(--stroke-border) solid rgba(255,255,255,.2);
+  border-radius: var(--radius-200);
+  padding: var(--space-200) var(--space-400);
+  font-size: var(--text-h7-size);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--text-ls-h7);
+  text-transform: uppercase;
+  color: rgba(255,255,255,.6);
+  width: fit-content;
+}
+.featured-address {
+  font-size: var(--text-h3-size);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-on-dark);
+  line-height: var(--text-lh-heading);
+  letter-spacing: -0.01em;
+  max-width: 480px;
+}
+.featured-desc {
+  font-size: var(--text-body-md);
+  color: rgba(255,255,255,.6);
+  line-height: 1.7;
+  max-width: 400px;
+}
+.featured-price {
+  font-size: var(--text-h4-size);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-on-dark);
+}
+.featured-divider {
+  width: 400px; height: var(--stroke-border);
+  background: rgba(255,255,255,.12);
+}
+.featured-icons {
+  display: flex; align-items: center; gap: var(--space-300);
+}
+.featured-icon-item {
+  display: flex; align-items: center; gap: var(--space-100);
+  font-size: var(--text-body-sm);
+  color: rgba(255,255,255,.6);
+}
+.featured-icon-item img { width: 18px; height: 18px; filter: brightness(0) invert(1); opacity: .5; }
+.feat-sep {
+  width: var(--stroke-border); height: 16px;
+  background: rgba(255,255,255,.15);
+}
+.featured-right {
+  background-image: url("https://www.figma.com/api/mcp/asset/bf1f64d6-f082-41ad-945c-b4614717df2c");
+  background-size: cover; background-position: center;
+  min-height: 480px;
+}
+
+/* ================================================================
+   7. WHY / FEATURES
+   ================================================================ */
+.why-section {
+  background: var(--bg-default);
+  padding: var(--space-3000) 0;
+}
+.why-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-1600);
+  margin-top: var(--space-1600);
+}
+.why-card {}
+.why-card-icon {
+  width: 72px; height: 72px; margin-bottom: var(--space-600);
+}
+.why-card h3 {
+  font-size: var(--text-h5-size);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-default);
+  margin-bottom: var(--space-400);
+  line-height: var(--text-lh-heading);
+}
+.why-card p {
+  font-size: var(--text-body-md);
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: var(--space-800);
+}
+
+/* ================================================================
+   8. TESTIMONIALS
+   ================================================================ */
+.testimonials {
+  background: var(--bg-subtle);
+  padding: var(--space-3000) 0;
+}
+.testimonials-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-600);
+  margin-top: var(--space-1600);
+}
+.testimonial-card {
+  background: var(--bg-default);
+  border: var(--stroke-border) solid var(--border-default);
+  border-radius: var(--radius-300);
+  padding: var(--space-600);
+  display: flex; flex-direction: column; gap: var(--space-400);
+}
+.stars {
+  display: flex; gap: var(--space-050);
+}
+.star-icon {
+  width: 18px; height: 18px;
+}
+.testimonial-quote {
+  font-size: var(--text-body-sm);
+  color: var(--text-default);
+  line-height: 1.7;
+  flex: 1;
+}
+.testimonial-avatar {
+  display: flex; align-items: center; gap: var(--space-300);
+  margin-top: var(--space-200);
+  padding-top: var(--space-400);
+  border-top: var(--stroke-border) solid var(--border-default);
+}
+.avatar-img {
+  width: 40px; height: 40px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  background: var(--color-slate-200);
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.avatar-img img { width: 100%; height: 100%; object-fit: cover; }
+.avatar-name {
+  font-size: var(--text-body-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-default);
+}
+.avatar-role {
+  font-size: var(--text-body-xs);
+  color: var(--text-secondary);
+}
+
+/* ================================================================
+   9. FOOTER
+   ================================================================ */
+.footer {
+  background: var(--bg-dark);
+  padding: var(--space-2400) 0 var(--space-1600);
+}
+.footer-inner {
+  display: grid;
+  grid-template-columns: 200px 1fr 1fr 1fr;
+  gap: var(--space-1600);
+  margin-bottom: var(--space-2400);
+}
+.footer-brand {}
+.footer-logo {
+  display: flex; align-items: center; gap: var(--space-200);
+  margin-bottom: var(--space-800);
+}
+.footer-logo-icon { width: 28px; height: 28px; }
+.footer-logo-text {
+  font-size: var(--text-h5-size);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-on-dark);
+  letter-spacing: -0.01em;
+}
+.footer-social {
+  display: flex; gap: var(--space-400);
+}
+.footer-social a {
+  width: 24px; height: 24px; display: flex; align-items: center;
+  opacity: .6; transition: opacity .15s;
+}
+.footer-social a:hover { opacity: 1; }
+.footer-social img { width: 24px; height: 24px; }
+.footer-col h4 {
+  font-size: var(--text-body-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-on-dark);
+  margin-bottom: var(--space-600);
+}
+.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: var(--space-400); }
+.footer-col ul li a {
+  font-size: var(--text-body-sm);
+  color: rgba(255,255,255,.5);
+  transition: color .15s;
+}
+.footer-col ul li a:hover { color: rgba(255,255,255,.9); }
+.footer-bottom {
+  border-top: var(--stroke-border) solid rgba(255,255,255,.08);
+  padding-top: var(--space-600);
+  font-size: var(--text-body-xs);
+  color: rgba(255,255,255,.3);
+}
+
+/* ================================================================
+   RESPONSIVE
+   ================================================================ */
+@media (max-width: 1100px) {
+  .property-grid      { grid-template-columns: repeat(2, 1fr); }
+  .testimonials-grid  { grid-template-columns: repeat(2, 1fr); }
+  .search-card        { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 900px) {
+  .container          { padding: 0 var(--space-800); }
+  .statistics-inner   { grid-template-columns: 1fr; }
+  .featured           { grid-template-columns: 1fr; }
+  .featured-right     { min-height: 300px; }
+  .why-grid           { grid-template-columns: 1fr; }
+  .footer-inner       { grid-template-columns: 1fr 1fr; }
+  .hero-content h1    { font-size: 48px; }
+}
+@media (max-width: 640px) {
+  .nav-links          { display: none; }
+  .property-grid      { grid-template-columns: 1fr; }
+  .testimonials-grid  { grid-template-columns: 1fr; }
+  .search-card        { grid-template-columns: 1fr; }
+  .stats-right        { grid-template-columns: 1fr; }
+  .hero-content h1    { font-size: 36px; }
+}
+</style>
+<!-- Load Inter from Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- ══ 1. NAV ══════════════════════════════════════════════════════ -->
+<nav class="nav">
+  <div class="container">
+    <div class="nav-inner">
+      <!-- Logo -->
+      <a href="#" class="nav-logo">
+        <svg class="nav-logo-icon" viewBox="0 0 28 28" fill="none">
+          <path d="M14 2L4 10v14h7v-8h6v8h7V10L14 2z" fill="#1dd287"/>
+          <circle cx="14" cy="9" r="2.5" fill="#fff" opacity=".8"/>
+        </svg>
+        Housely
+      </a>
+      <!-- Nav links -->
+      <div class="nav-links">
+        <a href="#" class="active">Home</a>
+        <a href="#">Buy</a>
+        <a href="#">Property Search</a>
+        <a href="#">About</a>
+        <a href="#">Contact</a>
+      </div>
+      <!-- Auth -->
+      <div class="nav-auth">
+        <a href="#" class="nav-signin">Sign In</a>
+        <a href="#" class="nav-register">Register</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ══ 2. HERO ═════════════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <h1>Property in London awaits</h1>
+    <p>Find the home of your dreams with our London property experts. Expert guidance from search to sale.</p>
+    <div class="hero-btns">
+      <a href="#" class="btn btn--primary">Find Here</a>
+      <a href="#" class="btn btn--subtle" style="color:#fff; border-color: rgba(255,255,255,.4);">Learn More</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 3. SEARCH BAR ═══════════════════════════════════════════════ -->
+<div class="search-wrapper">
+  <div class="search-card">
+    <div class="search-field">
+      <label>Location</label>
+      <input type="text" placeholder="Enter Street name or postcode">
+    </div>
+    <div class="search-field">
+      <label>Price</label>
+      <input type="text" placeholder="Enter price here">
+    </div>
+    <div class="search-field">
+      <label>Min</label>
+      <select><option>2+</option><option>1+</option><option>3+</option><option>4+</option></select>
+    </div>
+    <div class="search-field">
+      <label>Max</label>
+      <select><option>5+</option><option>3+</option><option>4+</option><option>6+</option></select>
+    </div>
+    <div class="search-field">
+      <label>Property Type</label>
+      <select>
+        <option value="">Select type here</option>
+        <option>Detached</option>
+        <option>Semi-Detached</option>
+        <option>Terraced</option>
+        <option>Flat</option>
+        <option>Bungalow</option>
+      </select>
+    </div>
+    <div class="search-btn">
+      <button class="btn btn--primary" style="padding: 0 var(--space-1200); white-space:nowrap;">Find Here</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 4. STATISTICS ════════════════════════════════════════════════ -->
+<section class="statistics">
+  <div class="container">
+    <div class="statistics-inner">
+      <!-- Left: heading + body + link -->
+      <div class="stats-left">
+        <h2 class="stats-eyebrow">Statistics</h2>
+        <h3 class="stats-subheading">Latest Property Data</h3>
+        <p class="stats-body">
+          The real estate market is constantly evolving, influenced by various factors such as economic conditions, interest rates, and demographic trends. Recently, there has been a noticeable shift towards suburban living as more people seek spacious homes with access to nature.
+        </p>
+        <a href="#" class="text-link">
+          Tell me more
+          <img src="https://www.figma.com/api/mcp/asset/a8878085-0f70-42e2-8d47-d92add38afc3" alt="">
+        </a>
+      </div>
+      <!-- Right: stat cards -->
+      <div class="stats-right">
+        <div class="stat-card">
+          <img class="stat-card-icon" src="https://www.figma.com/api/mcp/asset/90cc2eb9-5f6f-42d9-8cec-98abaa2de109" alt="">
+          <div class="stat-card-number">80%</div>
+          <p class="stat-card-desc">Of our vendors sell within 60 days of listing their property with us.</p>
+        </div>
+        <div class="stat-card">
+          <img class="stat-card-icon" src="https://www.figma.com/api/mcp/asset/c2abb919-b782-475a-bed2-cd1f9e9d90c0" alt="">
+          <div class="stat-card-number">95,000</div>
+          <p class="stat-card-desc">Properties successfully sold across London and the surrounding areas.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 5. OUR PROPERTY ══════════════════════════════════════════════ -->
+<section class="property-section">
+  <div class="container">
+    <div class="section-heading-row">
+      <h2>Our Property</h2>
+      <div class="chevron-group">
+        <button aria-label="Previous">
+          <img src="https://www.figma.com/api/mcp/asset/d9dd6d26-05cb-4ab0-b010-530d129a1a3d" alt="prev">
+        </button>
+        <button aria-label="Next">
+          <img src="https://www.figma.com/api/mcp/asset/a8878085-0f70-42e2-8d47-d92add38afc3" alt="next">
+        </button>
+      </div>
+    </div>
+
+    <div class="property-grid">
+      <!-- Card 1 -->
+      <div class="property-card">
+        <img class="property-card-img"
+             src="https://www.figma.com/api/mcp/asset/4fe643c4-5b13-4507-a045-540a481f9614"
+             alt="12 Cedar Lane">
+        <div class="property-card-body">
+          <span class="property-tag">For Sale</span>
+          <div class="property-address">12 Cedar Lane</div>
+          <div class="property-location">Notting Hill, W11 2JA</div>
+          <p class="property-desc">A charming period home with original features, bright reception rooms and a beautiful south-facing garden.</p>
+          <div class="property-price">£390,000</div>
+          <div class="property-divider"></div>
+          <div class="property-icons">
+            <div class="property-icon-item">
+              <img src="https://www.figma.com/api/mcp/asset/ce71e742-6cc1-4af8-b434-5f5dde7e3fb6" alt="beds"> 3
+            </div>
+            <div class="prop-icon-sep"></div>
+            <div class="property-icon-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 12h16M4 12V7a2 2 0 012-2h12a2 2 0 012 2v5M4 12v5a2 2 0 002 2h12a2 2 0 002-2v-5"/></svg> 2
+            </div>
+            <div class="prop-icon-sep"></div>
+            <div class="property-icon-item">
+              <img src="https://www.figma.com/api/mcp/asset/8f89dd4c-8a6c-4824-a20e-2ae73dcd638a" alt="kitchen"> 1
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="property-card">
+        <img class="property-card-img"
+             src="https://www.figma.com/api/mcp/asset/a72c6fe0-31b1-4e28-af34-279c496d7b57"
+             alt="12 Cedar Lane">
+        <div class="property-card-body">
+          <span class="property-tag">For Sale</span>
+          <div class="property-address">12 Cedar Lane</div>
+          <div class="property-location">Shoreditch, E1 6RF</div>
+          <p class="property-desc">Contemporary open-plan living in the heart of East London, steps from transport links and vibrant dining.</p>
+          <div class="property-price">£380,000</div>
+          <div class="property-divider"></div>
+          <div class="property-icons">
+            <div class="property-icon-item">
+              <img src="https://www.figma.com/api/mcp/asset/ce71e742-6cc1-4af8-b434-5f5dde7e3fb6" alt="beds"> 3
+            </div>
+            <div class="prop-icon-sep"></div>
+            <div class="property-icon-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 12h16M4 12V7a2 2 0 012-2h12a2 2 0 012 2v5M4 12v5a2 2 0 002 2h12a2 2 0 002-2v-5"/></svg> 2
+            </div>
+            <div class="prop-icon-sep"></div>
+            <div class="property-icon-item">
+              <img src="https://www.figma.com/api/mcp/asset/8f89dd4c-8a6c-4824-a20e-2ae73dcd638a" alt="kitchen"> 1
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="property-card">
+        <img class="property-card-img"
+             src="https://www.figma.com/api/mcp/asset/2f2600a3-19fb-4e82-9177-cbfd57459a54"
+             alt="98 Hill Drive">
+        <div class="property-card-body">
+          <span class="property-tag">For Sale</span>
+          <div class="property-address">98 Hill Drive</div>
+          <div class="property-location">Hampstead, NW3 2PB</div>
+          <p class="property-desc">A stunning detached home with sweeping views across Hampstead Heath. Double garage and mature gardens.</p>
+          <div class="property-price">£769,000</div>
+          <div class="property-divider"></div>
+          <div class="property-icons">
+            <div class="property-icon-item">
+              <img src="https://www.figma.com/api/mcp/asset/ce71e742-6cc1-4af8-b434-5f5dde7e3fb6" alt="beds"> 4
+            </div>
+            <div class="prop-icon-sep"></div>
+            <div class="property-icon-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 12h16M4 12V7a2 2 0 012-2h12a2 2 0 012 2v5M4 12v5a2 2 0 002 2h12a2 2 0 002-2v-5"/></svg> 3
+            </div>
+            <div class="prop-icon-sep"></div>
+            <div class="property-icon-item">
+              <img src="https://www.figma.com/api/mcp/asset/8f89dd4c-8a6c-4824-a20e-2ae73dcd638a" alt="kitchen"> 2
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="property-card">
+        <img class="property-card-img"
+             src="https://www.figma.com/api/mcp/asset/1f28f294-1511-4107-9e0b-1f2f56f453c7"
+             alt="96 Ada Place">
+        <div class="property-card-body">
+          <span class="property-tag">For Sale</span>
+          <div class="property-address">96 Ada Place</div>
+          <div class="property-location">Chelsea, SW3 4HB</div>
+          <p class="property-desc">An elegant Victorian townhouse on one of Chelsea's most sought-after streets, fully renovated throughout.</p>
+          <div class="property-price">£716,000</div>
+          <div class="property-divider"></div>
+          <div class="property-icons">
+            <div class="property-icon-item">
+              <img src="https://www.figma.com/api/mcp/asset/ce71e742-6cc1-4af8-b434-5f5dde7e3fb6" alt="beds"> 4
+            </div>
+            <div class="prop-icon-sep"></div>
+            <div class="property-icon-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 12h16M4 12V7a2 2 0 012-2h12a2 2 0 012 2v5M4 12v5a2 2 0 002 2h12a2 2 0 002-2v-5"/></svg> 2
+            </div>
+            <div class="prop-icon-sep"></div>
+            <div class="property-icon-item">
+              <img src="https://www.figma.com/api/mcp/asset/8f89dd4c-8a6c-4824-a20e-2ae73dcd638a" alt="kitchen"> 1
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 6. FEATURED PROPERTY ════════════════════════════════════════ -->
+<section class="featured">
+  <!-- Left panel: dark bg + text -->
+  <div class="featured-left">
+    <span class="featured-label">Featured Property</span>
+    <h2 class="featured-address">12 Cedar Drive, London, UK SW1A</h2>
+    <p class="featured-desc">
+      The real estate market is constantly evolving, influenced by various factors such as economic conditions, interest rates, and demographic trends. Recently, there has been a noticeable shift towards suburban living as more people seek spacious homes with access to nature.
+    </p>
+    <div class="featured-price">£580,000</div>
+    <div class="featured-divider"></div>
+    <div class="featured-icons">
+      <div class="featured-icon-item">
+        <img src="https://www.figma.com/api/mcp/asset/ce71e742-6cc1-4af8-b434-5f5dde7e3fb6" alt="beds"> 3
+      </div>
+      <div class="feat-sep"></div>
+      <div class="featured-icon-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.5"><path d="M4 12h16M4 12V7a2 2 0 012-2h12a2 2 0 012 2v5M4 12v5a2 2 0 002 2h12a2 2 0 002-2v-5"/></svg> 2
+      </div>
+      <div class="feat-sep"></div>
+      <div class="featured-icon-item">
+        <img src="https://www.figma.com/api/mcp/asset/8f89dd4c-8a6c-4824-a20e-2ae73dcd638a" alt="kitchen"> 2
+      </div>
+    </div>
+  </div>
+  <!-- Right panel: photo -->
+  <div class="featured-right" role="img" aria-label="12 Cedar Drive, London"></div>
+</section>
+
+<!-- ══ 7. WHY / FEATURES ════════════════════════════════════════════ -->
+<section class="why-section">
+  <div class="container">
+    <h2 style="font-size:var(--text-h3-size); font-weight:var(--font-weight-bold); letter-spacing:-0.01em;">
+      A fairer way to sell your house
+    </h2>
+    <div class="why-grid">
+
+      <div class="why-card">
+        <img class="why-card-icon"
+             src="https://www.figma.com/api/mcp/asset/ff47f064-5cd9-4e98-bfba-2843102bb429"
+             alt="">
+        <h3>Title for this section goes here</h3>
+        <p>Sky Peak Residences offers an unparalleled living experience, combining luxury with breathtaking views of the city skyline. Residents enjoy a range of premium amenities, including a state-of-the-art fitness centre, a serene rooftop garden and much more.</p>
+        <a href="#" class="text-link">
+          Tell me more
+          <img src="https://www.figma.com/api/mcp/asset/a8878085-0f70-42e2-8d47-d92add38afc3" alt="">
+        </a>
+      </div>
+
+      <div class="why-card">
+        <img class="why-card-icon"
+             src="https://www.figma.com/api/mcp/asset/c5129b48-9e8c-4d7b-8415-69d9c6bb1145"
+             alt="">
+        <h3>Title for this section goes here</h3>
+        <p>Sky Peak Residences offers an unparalleled living experience, combining luxury with breathtaking views of the city skyline. Residents enjoy a range of premium amenities, including a state-of-the-art fitness centre, a serene rooftop garden and much more.</p>
+        <a href="#" class="text-link">
+          Tell me more
+          <img src="https://www.figma.com/api/mcp/asset/a8878085-0f70-42e2-8d47-d92add38afc3" alt="">
+        </a>
+      </div>
+
+      <div class="why-card">
+        <img class="why-card-icon"
+             src="https://www.figma.com/api/mcp/asset/2333856d-b531-49d7-9846-24ea5942c842"
+             alt="">
+        <h3>Title for this section goes here</h3>
+        <p>Sky Peak Residences offers an unparalleled living experience, combining luxury with breathtaking views of the city skyline. Residents enjoy a range of premium amenities, including a state-of-the-art fitness centre, a serene rooftop garden and much more.</p>
+        <a href="#" class="text-link">
+          Tell me more
+          <img src="https://www.figma.com/api/mcp/asset/a8878085-0f70-42e2-8d47-d92add38afc3" alt="">
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ 8. TESTIMONIALS ══════════════════════════════════════════════ -->
+<section class="testimonials">
+  <div class="container">
+    <h2 style="font-size:var(--text-h3-size); font-weight:var(--font-weight-bold); letter-spacing:-0.01em;">
+      Our Testimonials
+    </h2>
+    <div class="testimonials-grid">
+
+      <div class="testimonial-card">
+        <div class="stars">
+          <img class="star-icon" src="https://www.figma.com/api/mcp/asset/1560fe69-753f-430a-b186-f47c730ac4b4" alt="★">
+          <img class="star-icon" src="https://www.figma.com/api/mcp/asset/1560fe69-753f-430a-b186-f47c730ac4b4" alt="★">
+          <img class="star-icon" src="https://www.figma.com/api/mcp/asset/1560fe69-753f-430a-b186-f47c730ac4b4" alt="★">
+          <img class="star-icon" src="https://www.figma.com/api/mcp/asset/1560fe69-753f-430a-b186-f47c730ac4b4" alt="★">
+          <img class="star-icon" src="https://www.figma.com/api/mcp/asset/1560fe69-753f-430a-b186-f47c730ac4b4" alt="★">
+        </div>
+        <p class="testimonial-quote">"Living at Sky Peak Residences has been a dream. The amenities are top-notch, and the views from the rooftop garden are simply breathtaking."</p>
+        <div class="testimonial-avatar">
+          <div class="avatar-img">
+            <img src="https://www.figma.com/api/mcp/asset/157e5c2b-9b24-4b57-aa21-5bc2d06962e7" alt="John Garcia">
+          </div>
+          <div>
+            <div class="avatar-name">John Garcia</div>
+            <div class="avatar-role">Property Buyer</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="stars">
+          <img class="star-icon" src="https://www.figma.com/api/mcp/asset/1560fe69-753f-430a-b186-f47c730ac4b4" alt="★">
+          <img class="star-icon" src="https://www.figma.com/api/mcp/asset/1560fe69-753f-430a-b186-f47c730ac4b4" alt="★">
+          <img class="star-icon" src="https://www.figma.com/api/mcp/asset/1560fe69-753f-430a-b186-f47c730ac4b4" alt="★">
+          <img class="star-icon" src="https://www.figma.com/api/mcp/asset/1560fe69-753f-430a-b186-f47c730ac4b4" alt="★">
+          <img class="star-icon" src="https://www.figma.com/api/mcp/asset/1560fe69-753f-430a-b186-f47c730ac4b4" alt="★">
+        </div>
+        <p class="testimonial-quote">"I have found this estate agency to be truly outstanding, and I want to share my experience with anyone looking to rent or buy in London."</p>
+        <div class="testimonial-avatar">
+          <div class="avatar-img">
+            <img src="https://www.figma.com/api/mcp/asset/157e5c2b-9b24-4b57-aa21-5bc2d06962e7" alt="Mary Hinge">
+          </div>
+          <div>
+            <div class="avatar-name">Mary Hinge</div>
+            <div class="avatar-role">Property Renter</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="stars">
+          <img class="star-icon" src="https://www.figma.com/api/mcp/asset/1560fe69-753f-430a-b186-f47c730ac4b4" alt="★">
+          <img class="star-icon" src="https://www.figma.com/api/mcp/asset/1560fe69-753f-430a-b186-f47c730ac4b4" alt="★">
+          <img class="star-icon" src="https://www.figma.com/api/mcp/asset/1560fe69-753f-430a-b186-f47c730ac4b4" alt="★">
+          <img class="star-icon" src="https://www.figma.com/api/mcp/asset/1560fe69-753f-430a-b186-f47c730ac4b4" alt="★">
+          <img class="star-icon" src="https://www.figma.com/api/mcp/asset/1560fe69-753f-430a-b186-f47c730ac4b4" alt="★">
+        </div>
+        <p class="testimonial-quote">"Living high has never felt so good. The facilities are exceptional and the team genuinely care about making you feel at home from day one."</p>
+        <div class="testimonial-avatar">
+          <div class="avatar-img">
+            <img src="https://www.figma.com/api/mcp/asset/157e5c2b-9b24-4b57-aa21-5bc2d06962e7" alt="Jose Nelson">
+          </div>
+          <div>
+            <div class="avatar-name">Jose Nelson</div>
+            <div class="avatar-role">Property Investor</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="stars">
+          <img class="star-icon" src="https://www.figma.com/api/mcp/asset/1560fe69-753f-430a-b186-f47c730ac4b4" alt="★">
+          <img class="star-icon" src="https://www.figma.com/api/mcp/asset/1560fe69-753f-430a-b186-f47c730ac4b4" alt="★">
+          <img class="star-icon" src="https://www.figma.com/api/mcp/asset/1560fe69-753f-430a-b186-f47c730ac4b4" alt="★">
+          <img class="star-icon" src="https://www.figma.com/api/mcp/asset/1560fe69-753f-430a-b186-f47c730ac4b4" alt="★">
+          <img class="star-icon" src="https://www.figma.com/api/mcp/asset/1560fe69-753f-430a-b186-f47c730ac4b4" alt="★">
+        </div>
+        <p class="testimonial-quote">"This team went above and beyond to find us our perfect family home. The process was seamless and the communication was excellent throughout."</p>
+        <div class="testimonial-avatar">
+          <div class="avatar-img">
+            <img src="https://www.figma.com/api/mcp/asset/157e5c2b-9b24-4b57-aa21-5bc2d06962e7" alt="Neil Rajan">
+          </div>
+          <div>
+            <div class="avatar-name">Neil Rajan</div>
+            <div class="avatar-role">Property Buyer</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ 9. FOOTER ════════════════════════════════════════════════════ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+
+      <!-- Brand + social -->
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <img class="footer-logo-icon"
+               src="https://www.figma.com/api/mcp/asset/d8801b06-9f60-4ba5-98b8-f1dc1c35cb5c"
+               alt="Housely">
+          <span class="footer-logo-text">Housely</span>
+        </div>
+        <div class="footer-social">
+          <a href="#" aria-label="X / Twitter">
+            <img src="https://www.figma.com/api/mcp/asset/e3b84e37-44bf-4806-91a5-edf908e983eb" alt="X">
+          </a>
+          <a href="#" aria-label="Instagram">
+            <img src="https://www.figma.com/api/mcp/asset/2b3f6284-d511-46df-ad3b-50a9c082f7f4" alt="Instagram">
+          </a>
+          <a href="#" aria-label="YouTube">
+            <img src="https://www.figma.com/api/mcp/asset/644d4800-aa76-4926-9b00-198a20db58c7" alt="YouTube">
+          </a>
+          <a href="#" aria-label="LinkedIn">
+            <img src="https://www.figma.com/api/mcp/asset/ec2ea3ca-fce0-4a29-b494-c09e4d0157da" alt="LinkedIn">
+          </a>
+        </div>
+      </div>
+
+      <!-- Col 1 -->
+      <div class="footer-col">
+        <h4>Use cases</h4>
+        <ul>
+          <li><a href="#">UI design</a></li>
+          <li><a href="#">Prototyping</a></li>
+          <li><a href="#">Wireframing</a></li>
+          <li><a href="#">Diagramming</a></li>
+          <li><a href="#">Design systems</a></li>
+          <li><a href="#">Collaboration features</a></li>
+          <li><a href="#">Template resources</a></li>
+          <li><a href="#">Team collaboration</a></li>
+        </ul>
+      </div>
+
+      <!-- Col 2 -->
+      <div class="footer-col">
+        <h4>Buyers</h4>
+        <ul>
+          <li><a href="#">Development</a></li>
+          <li><a href="#">Prototyping</a></li>
+          <li><a href="#">Development Features</a></li>
+          <li><a href="#">Design systems</a></li>
+          <li><a href="#">Collaboration features</a></li>
+          <li><a href="#">TipJam</a></li>
+        </ul>
+      </div>
+
+      <!-- Col 3 -->
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Best practices</a></li>
+          <li><a href="#">Colors</a></li>
+          <li><a href="#">User small</a></li>
+          <li><a href="#">Support</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">Resource library</a></li>
+        </ul>
+      </div>
+
+    </div>
+    <div class="footer-bottom">
+      © 2025 Housely Ltd. All rights reserved.
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
